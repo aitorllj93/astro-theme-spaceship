@@ -1,6 +1,6 @@
 {
   "author": "Spaceship CO",
-  "base": "astro-theme-spaceship/",
+  "base": "/astro-theme-spaceship",
   "defaultLocale": "en",
   "description": "Ship your Second Brain into the Cyber-Space",
   "site": "https://aitorllj93.github.io",
