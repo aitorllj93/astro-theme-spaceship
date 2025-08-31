@@ -4,6 +4,7 @@ import Page from "astro-spaceship/components/404/Page.astro";
 
 import "@/styles/global.css";
 import config from "astro-spaceship/config";
+import Fonts from "@/components/Fonts.astro";
 
 const getStaticPaths = getStaticPathsFactory({
   config
@@ -12,4 +13,8 @@ const getStaticPaths = getStaticPathsFactory({
 const { props } = (await getStaticPaths())[0]
 ---
 
-<Page {...props} />
+<Page {...props}>
+  <Fragment slot="head">
+    <Fonts />
+  </Fragment>
+</Page>

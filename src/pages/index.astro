@@ -1,6 +1,12 @@
 ---
 import "@/styles/landing.css";
+import config from "astro-spaceship/config";
 
-import LandingPage from "astro-spaceship/components/LandingPage/Spaceship.astro";
+import LandingPage from "astro-spaceship/components/LandingPage/Journey.astro";
 ---
-<LandingPage />
+
+<LandingPage
+  initialPage={`${config.base}plan/dia-1`}
+  lat={50.08713428837459}
+  lng={14.420846921180944}
+/>

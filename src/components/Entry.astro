@@ -1,0 +1,89 @@
+---
+import { render } from "astro:content";
+
+import type { Author as TAuthor, Document, Tag, SpaceshipConfig } from "astro-spaceship/types";
+
+import CoverImage from "astro-spaceship/components/Article/CoverImage.astro";
+import Tags from "astro-spaceship/components/Article/Tags.astro";
+import ArticleDate from "astro-spaceship/components/Article/Date.astro";
+import Author from "astro-spaceship/components/Article/Author.astro";
+import Title from "astro-spaceship/components/Article/Title.astro";
+import Subtitle from "astro-spaceship/components/Article/Subtitle.astro";
+import Description from "astro-spaceship/components/Article/Description.astro";
+import TextReader from "astro-spaceship/components/Article/TextReader/TextReader.astro";
+import { isLegacyConfig } from "astro-spaceship/config";
+
+export type Props = {
+  config: SpaceshipConfig,
+  author?: TAuthor | undefined;
+  document: Document;
+  tags: Tag[];
+};
+
+const { author, config, document, tags } = Astro.props;
+const { data } = document;
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const { Content } = await render(document as any);
+
+const showAuthor = isLegacyConfig(config) ? config.displayOptions?.showAuthor !== false : config.features.article.author.enabled;
+const showPublishDate = isLegacyConfig(config) ? config.displayOptions?.showPublishDate !== false : config.features.article.publishDate.enabled;
+const showTags = tags.length > 0;
+
+const showMetaSection = showAuthor || showPublishDate || showTags;
+
+const showDescriptionSection = true;
+
+
+const hash = (str: string) => {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
+  // fuerza a unsigned 32-bit
+  return h >>> 0;
+};
+
+const angleFromKey = (key: string, min = -3, max = 3) => {
+  const h = hash(key);
+  const t = h / 0xffffffff; // 0..1
+  return min + t * (max - min);
+};
+
+---
+<article class="article" data-pagefind-body>
+  <section class:list={["article-content", ...(data.cssClass ?? []), ...(data.cssclasses ?? [])]}>
+    <Title document={document} />
+    <Subtitle document={document} />
+    {
+      showDescriptionSection && (
+        <div class="article-description-section">
+          <Description document={document} />
+        </div>
+      )
+    }
+    {data.cover && (
+      <CoverImage {...data} style={`--rot:${angleFromKey(data.cover.src).toFixed(2)}deg;`}>
+        <span slot="figcaption" class="gloss" aria-hidden="true"></span>
+      </CoverImage>
+    )}
+    <div class="article-reader">
+      <TextReader />
+    </div>
+    <div data-pagefind-weight="0.1" class="article-body">
+      <Content />
+      {showDescriptionSection && (<hr>)}
+    </div>
+    {
+      showDescriptionSection && (
+        <div class="article-description-section">
+          {showMetaSection && (
+            <div class="article-meta">
+              <Author config={config} author={author} />
+              <ArticleDate config={config} document={document} />     
+              <Tags tags={tags} />
+            </div>
+          )}
+        </div>
+      )
+    }
+  </section>
+</article>

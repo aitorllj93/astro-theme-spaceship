@@ -1,7 +1,1 @@
-@import "spaceship-monolith/landings/spaceship/theme";
-
-:root {
-	--assets-stars: url('../assets/stars.png');
-	--assets-twinkling: url('../assets/twinkling.png');
-	--assets-clouds: url('../assets/clouds.png');
-}
+@import "spaceship-monolith/landings/journey/theme";

@@ -5,6 +5,9 @@ import Page from 'astro-spaceship/components/Article/Page.astro';
 import '@/styles/global.css';
 import config from 'astro-spaceship/config';
 
+import Entry from '@/components/Entry.astro';
+import Fonts from "@/components/Fonts.astro";
+
 
 export type { Props };
 
@@ -12,6 +15,13 @@ export const getStaticPaths = getStaticPathsFactory({
   config,
 });
 
+const { author, document, tags } = Astro.props;
 ---
 
-<Page {...Astro.props} />
+<Page {...Astro.props}>
+  <Fragment slot="head">
+    <Fonts />
+  </Fragment>
+  <Entry config={config} author={author} document={document} tags={tags}  slot="entry" />
+</Page>
+
