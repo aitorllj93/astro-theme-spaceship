@@ -1,6 +1,10 @@
 ---
 import "@/styles/landing.css";
 
+import Logo from '../assets/logo.png';
+
+import config from 'astro-spaceship/config';
+
 import LandingPage from "astro-spaceship/components/LandingPage/Spaceship.astro";
 ---
-<LandingPage />
+<LandingPage logo={Logo} initialPage={`${config.base}libros/genesis/01`} />
